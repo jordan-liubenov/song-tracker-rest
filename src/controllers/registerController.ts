@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
       }
       return
     } else {
-      res.json({ msg: "Success" })
+      res.status(201).json({ msg: "Success" })
     }
   } catch (error) {
     console.log(error)
@@ -20,3 +20,7 @@ router.post("/", async (req, res) => {
 })
 
 module.exports = router
+
+/*
+Idea: rewrite server (or atleast some of it) in an OOP fashion with classes
+*/

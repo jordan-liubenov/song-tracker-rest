@@ -1,9 +1,9 @@
-const User = require("../models/User")
-const setting: ServerSettings = require("../configurations/settings")
+const User1 = require("../models/User")
+const setting1: ServerSettings = require("../configurations/settings")
 
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
-const SALT_RNDS: number = setting.saltRounds
+const bcrypt1 = require("bcrypt")
+const jwt1 = require("jsonwebtoken")
+const SALT_RNDS1: number = setting.saltRounds
 
 interface RegisterRequest {
   body: {
@@ -12,6 +12,33 @@ interface RegisterRequest {
     password: string
     repeatPassword: string
   }
+}
+
+interface LoginRequest {
+  body: {
+    username: string
+    password: string
+  }
+}
+// First objective, handle user NOT existing
+async function login(req: LoginRequest) {
+  const username: string = req.body.username
+  const password: string = req.body.username
+
+  // In case of user not existing with given username
+  const usernameQuery = {
+    username: username,
+  }
+  const findUsername = await User.findOne(usernameQuery)
+  console.log(findUsername)
+  if (findUsername == null) {
+    const errorObj = {
+      userNotExist: true,
+    }
+    return errorObj
+  }
+
+  // In case of password being incorrect
 }
 
 async function register(req: RegisterRequest) {
@@ -140,4 +167,5 @@ function checkForUpper(pass: string): boolean {
 
 module.exports = {
   register,
+  login,
 }
