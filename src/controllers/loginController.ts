@@ -1,24 +1,28 @@
 import express, { Router } from "express"
-
-const { login } = require("../services/userService")
-
+import { UserError, UserService } from "../services/UserService"
 const router: Router = express.Router()
-
 const jwt = require("jsonwebtoken")
-
 const settings: ServerSettings = require("../configurations/settings")
 
 router.post("/", async (req, res) => {
   try {
-    const result = await login(req)
+    const result: Promise<object> | UserError = await UserService.login(req)
 
-    if (result.userNotExist) {
-      res.json({ noUser: true })
+    if (typeof result === "object") {
+      if (result.userNotExist) {
+        res.json({ noUser: true })
+      }
+      if (result.incorrectPass) {
+        res.json({ incorrectPass: true })
+      }
+    } else {
+      jwt.verify(result, settings.secret, (error: any) => {
+        if (error) {
+          return res.json({ error: error })
+        }
+        res.json({ result })
+      })
     }
-    if (result.incorrectPass) {
-      res.json({ incorrectPass: true })
-    }
-    
   } catch (error) {
     console.log(error)
   }

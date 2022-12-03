@@ -1,11 +1,10 @@
 import express, { Router } from "express"
-
-const { register } = require("../services/userService")
 const router: Router = express.Router()
+import { UserService } from "../services/UserService"
 
 router.post("/", async (req, res) => {
   try {
-    const result = await register(req)
+    const result = await UserService.register(req)
     if (typeof result === "object") {
       if (result.usernameTaken || result.emailTaken) {
         res.json({ error: result })
@@ -20,7 +19,3 @@ router.post("/", async (req, res) => {
 })
 
 module.exports = router
-
-/*
-Idea: rewrite server (or atleast some of it) in an OOP fashion with classes
-*/

@@ -1,4 +1,4 @@
-interface Validator {
+export interface Validator {
   validateEmail: (email: string) => boolean
   validateUsername: (username: string) => boolean
   validatePassword: (password: string) => boolean
@@ -6,10 +6,14 @@ interface Validator {
   checkForUpper: (pass: string) => boolean
 }
 
-class Validator {
+export class Validator {
   public static validateAll(email: string, username: string, password: string): boolean {
     let allValid = false
-    if (validateEmail(email) && validateUsername(username) && validatePassword(password)) {
+    if (
+      this.validateEmail(email) &&
+      this.validateUsername(username) &&
+      this.validatePassword(password)
+    ) {
       allValid = true
     } else {
       allValid = false
@@ -21,6 +25,7 @@ class Validator {
     let isValid = true
 
     let reg = /^[A-Za-z\d]+[@][A-Za-z]+\.[a-z]+$/g
+    
     if (email.length > 0) {
       if (reg.test(email)) {
         isValid = true
@@ -47,7 +52,7 @@ class Validator {
   public static validatePassword(password: string): boolean {
     let isValid = true
     if (password.length >= 8) {
-      if (checkForNumber(password) && checkForUpper(password)) {
+      if (this.checkForNumber(password) && this.checkForUpper(password)) {
         //if it has atleast one Num, and one Uppercase char, return true
         isValid = true
       } else {
@@ -81,5 +86,3 @@ class Validator {
     return hasUpper
   }
 }
-
-module.exports = Validator
