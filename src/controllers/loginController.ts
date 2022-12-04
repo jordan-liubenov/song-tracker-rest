@@ -6,7 +6,7 @@ const settings: ServerSettings = require("../configurations/settings")
 
 router.post("/", async (req, res) => {
   try {
-    const result: Promise<object> | UserError = await UserService.login(req)
+    const result: Promise<object> | UserError = await UserService.login(req) // ***********
 
     if (typeof result === "object") {
       if (result.userNotExist) {
@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
         if (error) {
           return res.json({ error: error })
         }
-        res.json({ result })
+        res.status(200).json({ result })
       })
     }
   } catch (error) {

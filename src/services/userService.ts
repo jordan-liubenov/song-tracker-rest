@@ -64,7 +64,7 @@ export class UserService {
     }
 
     try {
-      let salt = await bcrypt.genSalt(SALT_RNDS)
+      const salt = await bcrypt.genSalt(SALT_RNDS)
       const hashedPassword = await bcrypt.hash(password, salt)
 
       const newUserDocument = new User({
@@ -73,7 +73,8 @@ export class UserService {
         password: hashedPassword,
       })
 
-      // await newUserDocument.save() // Save document to Mongo
+      await newUserDocument.save() // Save document to Mongo
+      console.log("--------------------------")
       console.log(newUserDocument)
       console.log("--------------------------")
     } catch (error) {
@@ -83,7 +84,7 @@ export class UserService {
 
   public static async login(req: LoginRequest) {
     const username: string = req.body.username
-    const password: string = req.body.username
+    const password: string = req.body.password
 
     if (username.length == 0 || password.length == 0) {
       return
